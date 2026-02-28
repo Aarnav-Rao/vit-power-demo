@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import { FlowCanvas } from './components/FlowCanvas';
+import { CampusPieChart } from './components/CampusPieChart';
 import { campusPowerNetwork } from './data/powerNetwork';
 import { Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -45,8 +46,9 @@ function App() {
       </motion.header>
 
       {/* Main FlowCanvas */}
-      <main>
+      <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <FlowCanvas rootNode={campusPowerNetwork} />
+        <CampusPieChart />
       </main>
 
       {/* Background ambient glows */}

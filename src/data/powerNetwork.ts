@@ -40,24 +40,24 @@ const generateHistory = (baseLoad: number, variance: number): PowerDataPoint[] =
 
 export const campusPowerNetwork: PowerNodeData = {
   id: 'main-sub',
-  name: 'VIT Main 110/33kV Substation',
+  name: 'VIT Central Hub (110kV/33kV)',
   type: 'substation',
   status: 'online',
   currentLoad: 12500,
   capacity: 15000,
   voltage: '110kV In / 33kV Out',
-  efficiency: 98.5,
+  efficiency: 99.2,
   history: generateHistory(8500, 500),
   children: [
     {
       id: 'acad-zone',
-      name: 'Academic Zone Substation',
+      name: 'Academic Sector Alpha',
       type: 'substation',
       status: 'online',
       currentLoad: 5200,
       capacity: 7000,
       voltage: '33kV In / 11kV Out',
-      efficiency: 97.2,
+      efficiency: 98.8,
       history: generateHistory(3500, 300),
       children: [
         {
@@ -97,13 +97,13 @@ export const campusPowerNetwork: PowerNodeData = {
     },
     {
       id: 'hostel-zone',
-      name: 'Hostel Zone Substation',
+      name: 'Residential Grid Beta',
       type: 'substation',
       status: 'online',
       currentLoad: 4800,
       capacity: 6000,
       voltage: '33kV In / 11kV Out',
-      efficiency: 98.1,
+      efficiency: 99.1,
       history: generateHistory(4000, 400),
       children: [
         {
@@ -132,13 +132,13 @@ export const campusPowerNetwork: PowerNodeData = {
     },
     {
       id: 'fac-zone',
-      name: 'Facilities & Admin Zone',
+      name: 'Campus Amenities Terminal',
       type: 'substation',
       status: 'online',
       currentLoad: 2100,
       capacity: 3000,
       voltage: '33kV In / 11kV Out',
-      efficiency: 95.5,
+      efficiency: 97.5,
       history: generateHistory(1800, 100),
       children: [
         {
