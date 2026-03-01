@@ -3,13 +3,12 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recha
 import { campusPowerNetwork } from '../data/powerNetwork';
 
 export const CampusPieChart: React.FC = () => {
-    // Aggregate data from the top-level substations
-    const data = campusPowerNetwork.children?.map(sub => ({
-        name: sub.name.replace(' Substation', ''),
+    const colors = ['#3b82f6', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b'];
+
+    const data = campusPowerNetwork.children?.map((sub, index) => ({
+        name: sub.name,
         value: sub.currentLoad,
-        color: sub.id === 'acad-zone' ? '#3b82f6' :
-            sub.id === 'hostel-zone' ? '#8b5cf6' :
-                '#06b6d4'
+        color: colors[index % colors.length]
     })) || [];
 
     return (
