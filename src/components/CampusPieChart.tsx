@@ -1,11 +1,11 @@
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
-import { campusPowerNetwork } from '../data/powerNetwork';
+import type { PowerNodeData } from '../data/powerNetwork';
 
-export const CampusPieChart: React.FC = () => {
+export const CampusPieChart: React.FC<{ networkData: PowerNodeData }> = ({ networkData }) => {
     const colors = ['#3b82f6', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b'];
 
-    const data = campusPowerNetwork.children?.map((sub, index) => ({
+    const data = networkData.children?.map((sub, index) => ({
         name: sub.name,
         value: sub.currentLoad,
         color: colors[index % colors.length]
