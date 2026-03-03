@@ -197,11 +197,12 @@
 /* Children container */
 .children-container {
   display: flex;
-  gap: 2rem;
+  justify-content: center;
+  gap: 3rem;
   margin-top: 3rem;
   position: relative;
-  justify-content: center;
-  flex-wrap: wrap;
+  /* Allow the branches to spread horizontally */
+  min-width: max-content;
 }
 
 /* Connectors */
@@ -213,13 +214,15 @@
   height: 3rem;
   background: linear-gradient(to bottom, rgba(59, 130, 246, 0.5), rgba(59, 130, 246, 0.1));
   z-index: 1;
+  /* ensure it is centered on the 50% mark perfectly */
+  transform: translateX(-50%);
 }
 
 .connector-horizontal {
   position: absolute;
   top: -3rem;
   height: 2px;
-  background: rgba(59, 130, 246, 0.2);
+  background: rgba(59, 130, 246, 0.4);
   z-index: 1;
 }
 

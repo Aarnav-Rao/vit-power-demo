@@ -63,15 +63,17 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ rootNode }) => {
                             transition={{ duration: 0.3 }}
                             className="children-container"
                         >
-                            {/* Connector from parent to children horizontal line */}
-                            <div className="connector-horizontal" style={{
-                                left: `${100 / (node.children!.length * 2)}%`,
-                                right: `${100 / (node.children!.length * 2)}%`
-                            }} />
+                            {/* Horizontal connector line drawn between the first child's center and the last child's center */}
+                            {node.children!.length > 1 && (
+                                <div className="connector-horizontal" style={{
+                                    left: `${100 / (node.children!.length * 2)}%`,
+                                    right: `${100 / (node.children!.length * 2)}%`
+                                }} />
+                            )}
 
                             {node.children!.map((child) => (
-                                <div key={child.id} style={{ position: 'relative' }}>
-                                    {/* Vertical connector to child */}
+                                <div key={child.id} style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    {/* Vertical connector down to this child */}
                                     <div className="connector-line">
                                         <div className="pulse-line" />
                                     </div>
