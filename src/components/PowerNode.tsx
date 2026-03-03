@@ -153,30 +153,31 @@ export const PowerNode: React.FC<PowerNodeProps> = ({ data, onExpand, isExpanded
                                         initial={{ opacity: 0, height: 0 }}
                                         animate={{ opacity: 1, height: 140 }}
                                         exit={{ opacity: 0, height: 0 }}
-                                        className="graph-container"
-                                        style={{ marginTop: 0 }}
+                                        style={{ marginTop: 0, overflow: 'hidden' }}
                                     >
-                                        <ResponsiveContainer width="100%" height="100%">
-                                            <AreaChart data={data.history} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
-                                                <defs>
-                                                    <linearGradient id={`colorUsage-${data.id}`} x1="0" y1="0" x2="0" y2="1">
-                                                        <stop offset="5%" stopColor="var(--accent-blue)" stopOpacity={0.8} />
-                                                        <stop offset="95%" stopColor="var(--accent-blue)" stopOpacity={0} />
-                                                    </linearGradient>
-                                                </defs>
-                                                <XAxis dataKey="time" hide />
-                                                <YAxis domain={['auto', 'auto']} hide />
-                                                <Tooltip content={<CustomTooltip />} />
-                                                <Area
-                                                    type="monotone"
-                                                    dataKey="usage"
-                                                    stroke="var(--accent-cyan)"
-                                                    fillOpacity={1}
-                                                    fill={`url(#colorUsage-${data.id})`}
-                                                    animationDuration={1500}
-                                                />
-                                            </AreaChart>
-                                        </ResponsiveContainer>
+                                        <div className="graph-container" style={{ height: '140px', width: '100%' }}>
+                                            <ResponsiveContainer width="100%" height="100%">
+                                                <AreaChart data={data.history} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
+                                                    <defs>
+                                                        <linearGradient id={`colorUsage-${data.id}`} x1="0" y1="0" x2="0" y2="1">
+                                                            <stop offset="5%" stopColor="var(--accent-blue)" stopOpacity={0.8} />
+                                                            <stop offset="95%" stopColor="var(--accent-blue)" stopOpacity={0} />
+                                                        </linearGradient>
+                                                    </defs>
+                                                    <XAxis dataKey="time" hide />
+                                                    <YAxis domain={['auto', 'auto']} hide />
+                                                    <Tooltip content={<CustomTooltip />} />
+                                                    <Area
+                                                        type="monotone"
+                                                        dataKey="usage"
+                                                        stroke="var(--accent-cyan)"
+                                                        fillOpacity={1}
+                                                        fill={`url(#colorUsage-${data.id})`}
+                                                        isAnimationActive={false}
+                                                    />
+                                                </AreaChart>
+                                            </ResponsiveContainer>
+                                        </div>
                                     </motion.div>
                                 )}
                             </AnimatePresence>
