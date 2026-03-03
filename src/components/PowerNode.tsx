@@ -39,6 +39,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 export const PowerNode: React.FC<PowerNodeProps> = ({ data, onExpand, isExpanded = false }) => {
     const [expanded, setExpanded] = useState(isExpanded);
+    const [showGraph, setShowGraph] = useState(false);
 
     const toggleExpand = () => {
         const nextState = !expanded;
@@ -117,7 +118,7 @@ export const PowerNode: React.FC<PowerNodeProps> = ({ data, onExpand, isExpanded
                             className="node-expanded-content"
                             onClick={(e) => e.stopPropagation()} // Prevent collapse when interacting with contents
                         >
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
                                 <div className="stat-item">
                                     <span className="label">Efficiency</span>
                                     <span className="value" style={{ color: 'var(--accent-purple)' }}>{data.efficiency}%</span>
@@ -128,29 +129,57 @@ export const PowerNode: React.FC<PowerNodeProps> = ({ data, onExpand, isExpanded
                                 </div>
                             </div>
 
-                            <div className="graph-container">
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <AreaChart data={data.history} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
-                                        <defs>
-                                            <linearGradient id={`colorUsage-${data.id}`} x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="5%" stopColor="var(--accent-blue)" stopOpacity={0.8} />
-                                                <stop offset="95%" stopColor="var(--accent-blue)" stopOpacity={0} />
-                                            </linearGradient>
-                                        </defs>
-                                        <XAxis dataKey="time" hide />
-                                        <YAxis domain={['auto', 'auto']} hide />
-                                        <Tooltip content={<CustomTooltip />} />
-                                        <Area
-                                            type="monotone"
-                                            dataKey="usage"
-                                            stroke="var(--accent-cyan)"
-                                            fillOpacity={1}
-                                            fill={`url(#colorUsage-${data.id})`}
-                                            animationDuration={1500}
-                                        />
-                                    </AreaChart>
-                                </ResponsiveContainer>
-                            </div>
+                            <button
+                                onClick={() => setShowGraph(!showGraph)}
+                                style={{
+                                    width: '100%',
+                                    padding: '0.5rem',
+                                    background: 'rgba(255, 255, 255, 0.05)',
+                                    border: '1px solid var(--glass-border)',
+                                    borderRadius: '8px',
+                                    color: 'var(--text-secondary)',
+                                    fontSize: '0.75rem',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s',
+                                    marginBottom: showGraph ? '1rem' : '0'
+                                }}
+                            >
+                                {showGraph ? 'Hide Graph' : 'View Graph'}
+                            </button>
+
+                            <AnimatePresence>
+                                {showGraph && (
+                                    <motion.div
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: 140 }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                        className="graph-container"
+                                        style={{ marginTop: 0 }}
+                                    >
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <AreaChart data={data.history} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
+                                                <defs>
+                                                    <linearGradient id={`colorUsage-${data.id}`} x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="5%" stopColor="var(--accent-blue)" stopOpacity={0.8} />
+                                                        <stop offset="95%" stopColor="var(--accent-blue)" stopOpacity={0} />
+                                                    </linearGradient>
+                                                </defs>
+                                                <XAxis dataKey="time" hide />
+                                                <YAxis domain={['auto', 'auto']} hide />
+                                                <Tooltip content={<CustomTooltip />} />
+                                                <Area
+                                                    type="monotone"
+                                                    dataKey="usage"
+                                                    stroke="var(--accent-cyan)"
+                                                    fillOpacity={1}
+                                                    fill={`url(#colorUsage-${data.id})`}
+                                                    animationDuration={1500}
+                                                />
+                                            </AreaChart>
+                                        </ResponsiveContainer>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </motion.div>
                     )}
                 </AnimatePresence>
