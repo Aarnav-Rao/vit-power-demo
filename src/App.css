@@ -60,18 +60,24 @@
   flex-direction: column;
   gap: 3rem;
   position: relative;
-  align-items: center;
+  align-items: flex-start;
+  /* Fixes left scroll clipping */
   padding: 4rem 4rem;
   min-width: 100%;
 
-  /* Bold Crosshatch Flowchart Grid */
-  background-size: 100px 100px;
+  /* Bold Technical Blueprint Flowchart Grid */
+  background-color: rgba(10, 15, 30, 0.5);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.08) 2px, transparent 2px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 2px, transparent 2px);
+    linear-gradient(to right, rgba(59, 130, 246, 0.3) 2px, transparent 2px),
+    linear-gradient(to bottom, rgba(59, 130, 246, 0.3) 2px, transparent 2px),
+    linear-gradient(to right, rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+  background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+
   border-radius: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(59, 130, 246, 0.3);
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.8), 0 0 40px rgba(59, 130, 246, 0.1);
   overflow-x: auto;
 }
 

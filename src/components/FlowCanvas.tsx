@@ -88,8 +88,10 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ rootNode }) => {
     };
 
     return (
-        <div className="flow-canvas" style={{ width: '100%', overflowX: 'auto', padding: '2rem 0' }}>
-            {renderNodeTree(rootNode)}
+        <div className="flow-canvas">
+            <div style={{ minWidth: 'max-content', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                {renderNodeTree(rootNode)}
+            </div>
         </div>
     );
 };
