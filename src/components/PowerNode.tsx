@@ -8,7 +8,7 @@ import {
     Tooltip
 } from 'recharts';
 import type { PowerNodeData } from '../data/powerNetwork';
-import { Activity, Zap, Server, ChevronDown, ChevronUp } from 'lucide-react';
+import { Activity, Zap, Server, ChevronRight, ChevronLeft } from 'lucide-react';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -67,7 +67,11 @@ export const PowerNode: React.FC<PowerNodeProps> = ({ data, onExpand, isExpanded
                 animate={{ opacity: 1, y: 0 }}
                 className="power-node"
                 onClick={toggleExpand}
+                style={{ position: 'relative', paddingRight: '2.5rem' }}
             >
+                <div style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', opacity: 0.5, display: 'flex', alignItems: 'center' }}>
+                    {expanded ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
+                </div>
                 <motion.div layout className="node-header">
                     <div className="node-title-group">
                         <div className={cn("node-icon-box", `status-${data.status}`)}>
@@ -181,10 +185,6 @@ export const PowerNode: React.FC<PowerNodeProps> = ({ data, onExpand, isExpanded
                         </motion.div>
                     )}
                 </AnimatePresence>
-
-                <motion.div layout style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem', opacity: 0.5 }}>
-                    {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                </motion.div>
             </motion.div>
 
             {/* Children rendering logic moved to FlowCanvas */}
