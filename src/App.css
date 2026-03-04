@@ -93,8 +93,8 @@
   background: rgba(20, 24, 39, 0.6);
   border: 1px solid var(--glass-border);
   border-radius: 16px;
-  padding: 1.25rem;
-  width: 260px;
+  padding: 1rem;
+  width: 210px;
   cursor: pointer;
   transition: border-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
   backdrop-filter: blur(12px);
@@ -142,7 +142,7 @@
 }
 
 .node-title-group h3 {
-  font-size: 1rem;
+  font-size: 0.85rem;
   color: var(--text-primary);
 }
 
@@ -192,7 +192,7 @@
 }
 
 .stat-item .value {
-  font-size: 1rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -227,24 +227,21 @@
   position: absolute;
   top: -3rem;
   left: 50%;
-  width: 4px;
-  /* Increased from 2px */
+  width: 6px;
   height: 3rem;
-  background: linear-gradient(to bottom, rgba(59, 130, 246, 0.8), rgba(59, 130, 246, 0.2));
+  background: linear-gradient(to bottom, rgba(239, 68, 68, 0.8), rgba(239, 68, 68, 0.2));
   z-index: 1;
-  /* ensure it is centered on the 50% mark perfectly */
   transform: translateX(-50%);
-  border-radius: 2px;
+  border-radius: 3px;
 }
 
 .connector-horizontal {
   position: absolute;
   top: -3rem;
-  height: 4px;
-  /* Increased from 2px */
-  background: rgba(59, 130, 246, 0.6);
+  height: 6px;
+  background: rgba(239, 68, 68, 0.6);
   z-index: 1;
-  border-radius: 2px;
+  border-radius: 3px;
 }
 
 /* Animated pulse on root line */
