@@ -43,11 +43,11 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ rootNode }) => {
     };
 
     const renderNodeTree = (node: PowerNodeData) => {
-        const isExpanded = expandedNodes.has(node.id);
         const hasChildren = node.children && node.children.length > 0;
+        const isExpanded = expandedNodes.has(node.id);
 
         return (
-            <div key={node.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+            <div key={node.id} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
                 <PowerNode
                     data={node}
                     isExpanded={isExpanded}
@@ -63,17 +63,17 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ rootNode }) => {
                             transition={{ duration: 0.3 }}
                             className="children-container"
                         >
-                            {/* Horizontal connector line drawn between the first child's center and the last child's center */}
+                            {/* Vertical connector line drawn between the first child's center and the last child's center */}
                             {node.children!.length > 1 && (
-                                <div className="connector-horizontal" style={{
-                                    left: `${100 / (node.children!.length * 2)}%`,
-                                    right: `${100 / (node.children!.length * 2)}%`
+                                <div className="connector-vertical" style={{
+                                    top: `${100 / (node.children!.length * 2)}%`,
+                                    bottom: `${100 / (node.children!.length * 2)}%`
                                 }} />
                             )}
 
                             {node.children!.map((child) => (
-                                <div key={child.id} style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                    {/* Vertical connector down to this child */}
+                                <div key={child.id} style={{ position: 'relative', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                    {/* Horizontal connector line to this child */}
                                     <div className="connector-line">
                                         <div className="pulse-line" />
                                     </div>
@@ -89,7 +89,7 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ rootNode }) => {
 
     return (
         <div className="flow-canvas">
-            <div style={{ minWidth: 'max-content', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ minWidth: 'max-content', margin: '0 auto', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
                 {renderNodeTree(rootNode)}
             </div>
         </div>
