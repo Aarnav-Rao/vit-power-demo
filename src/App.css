@@ -65,19 +65,19 @@
   padding: 4rem 4rem;
   min-width: 100%;
 
-  /* Bold Technical Blueprint Flowchart Grid */
-  background-color: rgba(10, 15, 30, 0.5);
+  /* Crisp, Non-Glowing Grid */
+  background-color: var(--bg-color);
   background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
   background-image:
-    linear-gradient(to right, rgba(59, 130, 246, 0.3) 2px, transparent 2px),
-    linear-gradient(to bottom, rgba(59, 130, 246, 0.3) 2px, transparent 2px),
-    linear-gradient(to right, rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
-  background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+    linear-gradient(to right, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-position: -1px -1px, -1px -1px, -1px -1px, -1px -1px;
 
   border-radius: 20px;
-  border: 2px solid rgba(59, 130, 246, 0.3);
-  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.8), 0 0 40px rgba(59, 130, 246, 0.1);
+  border: 1px solid var(--glass-border);
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
   overflow-x: auto;
 }
 
@@ -214,81 +214,129 @@
 /* Children container */
 .children-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   gap: 2rem;
-  margin-left: 5rem;
+  margin-top: 6rem;
+  margin-left: 0;
   position: relative;
-  /* Allow the branches to spread vertically/horizontally */
   min-width: max-content;
 }
 
 /* Connectors */
-.connector-line {
+.connector-horizontal {
   position: absolute;
-  left: -5rem;
-  top: 50%;
+  top: -4rem;
   height: 6px;
-  width: 4rem;
-  background: rgba(239, 68, 68, 1);
-  z-index: 1;
-  transform: translateY(-50%);
-  border-radius: 3px 0 0 3px;
-}
-
-.connector-line::after {
-  content: '';
-  position: absolute;
-  right: -12px;
-  top: 50%;
-  transform: translateY(-50%);
-  border-top: 8px solid transparent;
-  border-bottom: 8px solid transparent;
-  border-left: 12px solid rgba(239, 68, 68, 1);
-}
-
-.connector-vertical {
-  position: absolute;
-  left: -5rem;
-  width: 6px;
-  background: rgba(239, 68, 68, 1);
+  background: var(--accent-cyan);
   z-index: 1;
   border-radius: 3px;
 }
 
-/* Animated pulse on root line */
-.pulse-line {
+.connector-parent-drop {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--accent-red);
-  opacity: 0.3;
-  animation: pulseHorizontal 2s infinite;
+  top: -6rem;
+  left: 50%;
+  width: 6px;
+  height: 2rem;
+  background: var(--accent-cyan);
+  z-index: 1;
+  transform: translateX(-50%);
+  border-radius: 3px 3px 0 0;
 }
 
-@keyframes pulseHorizontal {
-  0% {
-    transform: scaleX(0);
-    transform-origin: left;
-    opacity: 0.8;
-  }
+.connector-child-drop {
+  position: absolute;
+  top: -4rem;
+  left: 50%;
+  width: 24px;
+  height: 4rem;
+  background: transparent;
+  z-index: 1;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  50% {
-    transform: scaleX(1);
-    transform-origin: left;
-    opacity: 0.4;
-  }
+.pulse-line {
+  display: none;
+}
 
-  51% {
-    transform: scaleX(1);
-    transform-origin: right;
-  }
 
-  100% {
-    transform: scaleX(0);
-    transform-origin: right;
-    opacity: 0;
-  }
+
+/* Interactive Schematic Dots */
+.terminal-dot-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: crosshair;
+  z-index: 20;
+}
+
+.terminal-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 8px currentColor;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.terminal-dot-wrapper:hover .terminal-dot {
+  transform: scale(1.5);
+  box-shadow: 0 0 16px currentColor, inset 0 0 4px white;
+}
+
+.terminal-tooltip {
+  position: absolute;
+  width: 160px;
+  padding: 10px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 100;
+}
+
+.terminal-dot-wrapper:hover .terminal-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.tooltip-top {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+}
+.terminal-dot-wrapper:hover .tooltip-top {
+  transform: translateX(-50%) translateY(-12px);
+}
+
+.tooltip-bottom {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+}
+.terminal-dot-wrapper:hover .tooltip-bottom {
+  transform: translateX(-50%) translateY(12px);
+}
+
+.tooltip-left {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%) translateX(0);
+}
+.terminal-dot-wrapper:hover .tooltip-left {
+  transform: translateY(-50%) translateX(-12px);
+}
+
+.tooltip-right {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%) translateX(0);
+}
+.terminal-dot-wrapper:hover .tooltip-right {
+  transform: translateY(-50%) translateX(12px);
 }

@@ -118,31 +118,6 @@ function App() {
         <CampusPieChart networkData={networkData} />
       </main>
 
-      {/* Background ambient glows */}
-      <div
-        style={{
-          position: 'fixed',
-          top: '-20%',
-          left: '-10%',
-          width: '50vw',
-          height: '50vw',
-          background: 'radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 60%)',
-          zIndex: -1,
-          pointerEvents: 'none'
-        }}
-      />
-      <div
-        style={{
-          position: 'fixed',
-          bottom: '-20%',
-          right: '-10%',
-          width: '60vw',
-          height: '60vw',
-          background: 'radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 60%)',
-          zIndex: -1,
-          pointerEvents: 'none'
-        }}
-      />
     </div>
   );
 }

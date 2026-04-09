@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { PowerNodeData } from '../data/powerNetwork';
-import { PowerNode } from './PowerNode';
+import { PowerNode, TransformerVerticalSVG } from './PowerNode';
 
 interface FlowCanvasProps {
     rootNode: PowerNodeData;
@@ -47,7 +47,7 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ rootNode }) => {
         const isExpanded = expandedNodes.has(node.id);
 
         return (
-            <div key={node.id} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
+            <div key={node.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
                 <PowerNode
                     data={node}
                     isExpanded={isExpanded}
@@ -63,19 +63,24 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ rootNode }) => {
                             transition={{ duration: 0.3 }}
                             className="children-container"
                         >
-                            {/* Vertical connector line drawn between the first child's center and the last child's center */}
+                            {/* Horizontal connector line drawn between the first child's center and the last child's center */}
                             {node.children!.length > 1 && (
-                                <div className="connector-vertical" style={{
-                                    top: `${100 / (node.children!.length * 2)}%`,
-                                    bottom: `${100 / (node.children!.length * 2)}%`
+                                <div className="connector-horizontal" style={{
+                                    left: `${100 / (node.children!.length * 2)}%`,
+                                    right: `${100 / (node.children!.length * 2)}%`
                                 }} />
                             )}
+                            
+                            {/* Parent drop line to the span */}
+                            <div className="connector-parent-drop" />
 
                             {node.children!.map((child) => (
-                                <div key={child.id} style={{ position: 'relative', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                    {/* Horizontal connector line to this child */}
-                                    <div className="connector-line">
-                                        <div className="pulse-line" />
+                                <div key={child.id} style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    {/* Vertical connector line dropping into this child with inline Transformer */}
+                                    <div className="connector-child-drop">
+                                        <div style={{ width: '6px', height: '1rem', background: 'var(--accent-cyan)' }} />
+                                        <TransformerVerticalSVG strokeColor="var(--accent-cyan)" />
+                                        <div style={{ width: '6px', flexGrow: 1, background: 'var(--accent-cyan)', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }} />
                                     </div>
                                     {renderNodeTree(child)}
                                 </div>
@@ -89,7 +94,7 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ rootNode }) => {
 
     return (
         <div className="flow-canvas">
-            <div style={{ minWidth: 'max-content', margin: '0 auto', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
+            <div style={{ minWidth: 'max-content', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start' }}>
                 {renderNodeTree(rootNode)}
             </div>
         </div>

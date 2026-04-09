@@ -8,7 +8,7 @@ import {
     Tooltip
 } from 'recharts';
 import type { PowerNodeData } from '../data/powerNetwork';
-import { Activity, Zap, Server, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Activity, Zap, Server, ChevronDown, ChevronUp } from 'lucide-react';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -36,6 +36,14 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     return null;
 };
 
+// SVG Transformer Icon (Vertical)
+export const TransformerVerticalSVG = ({ strokeColor = "currentColor" }: { strokeColor?: string }) => (
+    <svg width="24" height="40" viewBox="0 0 24 40" fill="none" stroke={strokeColor} strokeWidth="3">
+        <circle cx="12" cy="12" r="10" />
+        <circle cx="12" cy="28" r="10" />
+    </svg>
+);
+
 export const PowerNode: React.FC<PowerNodeProps> = ({ data, onExpand, isExpanded = false }) => {
     const [expanded, setExpanded] = useState(isExpanded);
     const [showGraph, setShowGraph] = useState(false);
@@ -50,36 +58,45 @@ export const PowerNode: React.FC<PowerNodeProps> = ({ data, onExpand, isExpanded
 
     const getIcon = () => {
         switch (data.type) {
-            case 'substation': return <Server size={20} />;
-            case 'building': return <Activity size={20} />;
-            case 'transformer': return <Zap size={20} />;
-            default: return <Zap size={20} />;
+            case 'substation': return <Server size={28} />;
+            case 'building': return <Activity size={28} />;
+            case 'transformer': return <Zap size={28} />;
+            default: return <Zap size={28} />;
         }
     };
 
     const loadPercent = Math.round((data.currentLoad / data.capacity) * 100);
 
-    return (
-        <div className="node-wrapper">
-            <motion.div
-                layout
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="power-node"
-                onClick={toggleExpand}
-                style={{ position: 'relative', paddingRight: '2.5rem' }}
-            >
-                <div style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', opacity: 0.5, display: 'flex', alignItems: 'center' }}>
-                    {expanded ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
-                </div>
-                <motion.div layout className="node-header">
+    const statusColor = data.status === 'online' ? 'var(--status-online)' : data.status === 'warning' ? 'var(--status-warning)' : 'var(--status-critical)';
+
+    // Parse transformer count from name
+    let trafoCount = 0;
+    const trafoMatch = data.name.match(/(\d+)x Trafo/);
+    if (trafoMatch) {
+        trafoCount = parseInt(trafoMatch[1], 10);
+    }
+
+    const isMainSub = data.id === 'main-sub';
+    const isTrafoNode = trafoCount > 0;
+
+
+
+
+
+    // We ONLY render the stats card if it's NOT a schematic mode, otherwise the tooltip dots handle it
+    const renderStatsCard = () => {
+        if (isMainSub || isTrafoNode) return null;
+        
+        return (
+            <div style={{ background: 'rgba(20, 24, 39, 0.4)', borderRadius: '12px', padding: '1rem', border: '1px solid var(--glass-border)' }}>
+                <motion.div layout className="node-header" style={{ marginBottom: '0.75rem' }}>
                     <div className="node-title-group">
                         <div className={cn("node-icon-box", `status-${data.status}`)}>
                             {getIcon()}
                         </div>
                         <div>
                             <motion.h3 layout="position">{data.name}</motion.h3>
-                            <motion.p layout="position">{data.voltage} • {data.type}</motion.p>
+                            <motion.p layout="position">{data.voltage}</motion.p>
                         </div>
                     </div>
                     <div className={cn("node-indicator", data.status)} />
@@ -98,18 +115,46 @@ export const PowerNode: React.FC<PowerNodeProps> = ({ data, onExpand, isExpanded
                     </div>
                 </motion.div>
 
-                {/* Progress bar for load */}
-                <motion.div layout style={{ marginTop: '1rem', height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden' }}>
+                <motion.div layout style={{ marginTop: '0.75rem', height: '3px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden' }}>
                     <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${loadPercent}%` }}
                         transition={{ duration: 1, ease: 'easeOut' }}
                         style={{
                             height: '100%',
-                            background: data.status === 'online' ? 'var(--status-online)' : data.status === 'warning' ? 'var(--status-warning)' : 'var(--status-critical)'
+                            background: statusColor
                         }}
                     />
                 </motion.div>
+            </div>
+        );
+    };
+
+    return (
+        <div className="node-wrapper">
+            <motion.div
+                layout
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={cn("power-node", (isMainSub || isTrafoNode) ? "schematic-mode" : "")}
+                onClick={toggleExpand}
+                style={{ 
+                    position: 'relative', 
+                    paddingBottom: (data.children && data.children.length > 0) ? '2.5rem' : '1rem',
+                    paddingRight: '1rem',
+                    background: 'rgba(20, 24, 39, 0.6)',
+                    border: '1px solid var(--glass-border)',
+                    width: '145px'
+                }}
+            >
+                {(data.children && data.children.length > 0) && (
+                    <div style={{ position: 'absolute', bottom: '0.5rem', left: '50%', transform: 'translateX(-50%)', opacity: 0.8, display: 'flex', alignItems: 'center', background: 'rgba(255,255,255,0.1)', borderRadius: '50%', padding: '4px' }}>
+                        {expanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                    </div>
+                )}
+                
+                {/* Stats Rendering Only */}
+                {renderStatsCard()}
 
                 <AnimatePresence>
                     {expanded && (
@@ -119,7 +164,8 @@ export const PowerNode: React.FC<PowerNodeProps> = ({ data, onExpand, isExpanded
                             exit={{ opacity: 0, height: 0 }}
                             transition={{ duration: 0.3 }}
                             className="node-expanded-content"
-                            onClick={(e) => e.stopPropagation()} // Prevent collapse when interacting with contents
+                            onClick={(e) => e.stopPropagation()}
+                            style={{ background: 'rgba(20, 24, 39, 0.4)', borderRadius: '12px', padding: '1rem', marginTop: '0.5rem', border: '1px solid var(--glass-border)' }}
                         >
                             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
                                 <div className="stat-item">
@@ -159,7 +205,7 @@ export const PowerNode: React.FC<PowerNodeProps> = ({ data, onExpand, isExpanded
                                         style={{ marginTop: 0, overflow: 'hidden' }}
                                     >
                                         <div className="graph-container" style={{ height: '140px', width: '100%', display: 'flex', justifyContent: 'center' }}>
-                                            <AreaChart width={270} height={140} data={data.history} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
+                                            <AreaChart width={125} height={140} data={data.history} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
                                                 <defs>
                                                     <linearGradient id={`colorUsage-${data.id}`} x1="0" y1="0" x2="0" y2="1">
                                                         <stop offset="5%" stopColor="var(--accent-blue)" stopOpacity={0.8} />
@@ -186,8 +232,6 @@ export const PowerNode: React.FC<PowerNodeProps> = ({ data, onExpand, isExpanded
                     )}
                 </AnimatePresence>
             </motion.div>
-
-            {/* Children rendering logic moved to FlowCanvas */}
         </div>
     );
 };
